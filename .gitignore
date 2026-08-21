@@ -1,0 +1,15 @@
+# 개인정보 원본 파일 — 절대 커밋 금지
+*.xlsx
+*.xls
+*.csv
+*.pdf
+_sheet-import/
+명단*
+붙임*
+
+# 시스템
+.DS_Store
+Thumbs.db
+desktop.ini
+node_modules/
+.vscode/

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2027학년도 입학사정관 모의평가 교육 신청 | 울산대학교 입학관리팀</title>
+<meta name="description" content="2027학년도 입학사정관 모의평가 교육 참석 차수 신청">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/logo/logomark-solid.png">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="brandbar">
+  <div>
+    <span class="brandbar__title">모의평가 교육 신청 시스템</span>
+    <span class="brandbar__sub" id="modeTag" hidden>시연 모드 · 더미 데이터</span>
+  </div>
+  <a href="admin.html">관리자</a>
+</div>
+
+<div class="page">
+  <div class="frame">
+
+    <div class="orghead">
+      <div class="orghead__left">
+        <img class="orghead__logo" src="assets/logo/logomark-solid.png" alt="울산대학교 로고마크">
+        <span class="orghead__rule"></span>
+        <div class="orghead__names">
+          <span class="orghead__ko">울산대학교 입학관리팀</span>
+          <span class="orghead__en">UNIVERSITY OF ULSAN</span>
+        </div>
+      </div>
+      <span class="orghead__meta">신청 마감 <span id="deadlineText">—</span></span>
+    </div>
+
+    <div class="steps" id="steps">
+      <div class="step" data-step="verify">
+        <span class="step__n">1</span><span class="step__label">본인 확인</span><span class="step__bar"></span>
+      </div>
+      <div class="step" data-step="select">
+        <span class="step__n">2</span><span class="step__label">차수 선택</span><span class="step__bar"></span>
+      </div>
+      <div class="step" data-step="done">
+        <span class="step__n">3</span><span class="step__label">신청 완료</span>
+      </div>
+    </div>
+
+    <!-- STEP 1 · 본인 확인 -->
+    <section class="section" id="viewVerify">
+      <h1 class="section__title">2027학년도 입학사정관 모의평가 교육 신청</h1>
+      <p class="section__lead">참석 가능한 차수를 선택해 신청하세요. 1개 차수는 1일차(종일)와 2일차(오후)로 구성되며, 이수 시 12단위가 인정됩니다.</p>
+
+      <form class="form" id="verifyForm" autocomplete="off">
+        <div class="field">
+          <label class="field__label" for="empNo">사번</label>
+          <input class="input" id="empNo" name="empNo" type="text" inputmode="numeric" maxlength="6" placeholder="6자리 사번" required>
+        </div>
+        <div class="field">
+          <label class="field__label" for="empName">성명</label>
+          <input class="input" id="empName" name="empName" type="text" maxlength="20" placeholder="명단에 등록된 성명" required>
+        </div>
+
+        <div class="alert alert--danger" id="verifyError" hidden></div>
+
+        <button class="btn btn--lg btn--block" id="verifyBtn" type="submit">본인 확인</button>
+
+        <p class="note">명단에 없는 경우 입학관리팀(052-259-2058)으로 문의해 주세요. 입력한 사번과 성명은 비공개 명단과 서버에서 대조되며 화면에 명단이 노출되지 않습니다.</p>
+
+        <div class="alert alert--info" id="demoHint" hidden></div>
+      </form>
+    </section>
+
+    <!-- STEP 2 · 차수 선택 -->
+    <section class="section" id="viewSelect" hidden>
+      <div class="section__head">
+        <h1 class="section__title section__title--sm" id="selectTitle">참석 차수를 선택해 주세요</h1>
+        <span class="subtle" id="userUnit"></span>
+      </div>
+
+      <div class="cohorts" id="cohortList"></div>
+
+      <div class="alert alert--danger" id="selectError" hidden style="margin-top:16px"></div>
+
+      <div class="btnrow btnrow--mt">
+        <button class="btn btn--lg" id="submitBtn" type="button" disabled>차수를 선택하세요</button>
+        <button class="btn btn--lg btn--text" id="backBtn" type="button">처음으로</button>
+      </div>
+      <p class="note" style="margin-top:12px">정원 도달 차수는 대기 등록만 가능합니다. 취소자 발생 시 대기 1순위가 자동 승급됩니다.</p>
+    </section>
+
+    <!-- STEP 3 · 신청 완료 -->
+    <section class="section" id="viewDone" hidden>
+      <div class="done__head">
+        <span class="done__mark" id="doneMark">✓</span>
+        <h1 class="section__title section__title--sm" id="doneTitle">신청이 확정되었습니다</h1>
+      </div>
+
+      <div class="receipt" id="receipt"></div>
+
+      <p class="note" style="margin-top:20px; font-size:var(--text-body-sm); line-height:var(--leading-body-sm); color:var(--text-muted); max-width:620px;">
+        노트북은 제공되며 별도 준비물은 없습니다. 점심시간(12:00~13:00)은 인정 시수에서 제외됩니다. 부득이한 변경은 마감일 전까지 이 화면에서 직접 가능합니다.
+      </p>
+
+      <div class="alert alert--danger" id="doneError" hidden style="margin-top:16px"></div>
+
+      <div class="btnrow" style="margin-top:24px">
+        <button class="btn btn--secondary" id="changeBtn" type="button">차수 변경</button>
+        <button class="btn btn--outline" id="cancelBtn" type="button">신청 취소</button>
+        <button class="btn btn--text" id="logoutBtn" type="button">로그아웃</button>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div class="foot">
+  울산대학교 입학관리팀 · 052-259-2058 · 울산광역시 남구 대학로 93<br>
+  2026년 고교교육 기여대학 지원사업 · 2027학년도 입학사정관 모의평가 교육
+</div>
+
+<script src="assets/api.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

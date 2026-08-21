@@ -1,0 +1,7 @@
+{
+  "_comment": "Apps Script 웹앱 배포 URL을 apiUrl에 기입하면 실서비스 모드로 전환됩니다. 비워두면 시연 모드(localStorage)로 동작합니다.",
+  "apiUrl": "",
+  "deadlineText": "2026-08-22T18:00",
+  "venue": "울산대학교 22호관 401호 전산교육실",
+  "contact": "052-259-2058"
+}

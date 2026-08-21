@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>신청 관리 | 2027학년도 입학사정관 모의평가 교육</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/logo/logomark-solid.png">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="brandbar">
+  <div>
+    <span class="brandbar__title">모의평가 교육 신청 관리</span>
+    <span class="brandbar__sub" id="modeTag" hidden>시연 모드 · 더미 데이터</span>
+  </div>
+  <a href="index.html">신청 화면</a>
+</div>
+
+<!-- 로그인 -->
+<div class="page" id="viewLogin">
+  <div class="frame login">
+    <div class="orghead">
+      <div class="orghead__left">
+        <img class="orghead__logo" src="assets/logo/logomark-solid.png" alt="울산대학교 로고마크">
+        <span class="orghead__rule"></span>
+        <div class="orghead__names">
+          <span class="orghead__ko">울산대학교 입학관리팀</span>
+          <span class="orghead__en">UNIVERSITY OF ULSAN</span>
+        </div>
+      </div>
+    </div>
+    <section class="section">
+      <h1 class="section__title section__title--sm" style="margin-bottom:8px">관리자 로그인</h1>
+      <p class="note" style="margin-bottom:24px">신청 현황과 명단은 인증 후에만 조회할 수 있습니다.</p>
+      <form class="form" id="loginForm" autocomplete="off">
+        <div class="field">
+          <label class="field__label" for="adminPw">관리자 비밀번호</label>
+          <input class="input" id="adminPw" type="password" required>
+        </div>
+        <div class="alert alert--danger" id="loginError" hidden></div>
+        <button class="btn btn--lg btn--block" type="submit">로그인</button>
+      </form>
+    </section>
+  </div>
+</div>
+
+<!-- 관리 화면 -->
+<div class="wide" id="viewAdmin" hidden>
+  <div class="section__head">
+    <div>
+      <h1 class="section__title" style="margin-bottom:6px">모의평가 교육 신청 관리</h1>
+      <p class="subnote" style="margin:0">2027학년도 입학사정관 모의평가 교육 · 22호관 401호 전산교육실 (30석)</p>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px">
+      <span class="subtle">최종 갱신 <span id="lastSync">—</span></span>
+      <button class="btn btn--sm btn--outline" id="refreshBtn" type="button">새로고침</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="tabs" id="tabs">
+      <button class="tab is-on" data-tab="status" type="button">현황 대시보드</button>
+      <button class="tab" data-tab="pending" type="button">미신청자</button>
+      <button class="tab" data-tab="manage" type="button">신청자 관리</button>
+      <button class="tab" data-tab="config" type="button">차수 · 정원 설정</button>
+    </div>
+
+    <!-- 현황 대시보드 -->
+    <div class="tabpanel" id="panelStatus">
+      <div class="stats" id="stats"></div>
+
+      <h2 class="subhead">차수별 현황</h2>
+      <div class="tablewrap tablescroll">
+        <div class="grid-head g-cohort">
+          <span>차수</span><span>일정</span><span>확정</span><span>대기</span><span>잔여</span><span>충원율</span>
+        </div>
+        <div id="cohortRows"></div>
+      </div>
+
+      <div class="btnrow" style="margin-top:20px">
+        <button class="btn btn--sm btn--secondary" id="exportRoll" type="button">차수별 출석부 내보내기</button>
+        <button class="btn btn--sm btn--secondary" id="exportAll" type="button">전체 현황 (CSV)</button>
+        <button class="btn btn--sm btn--outline" id="exportMeal" type="button">차수별 인원 집계 · 식대 정산</button>
+      </div>
+    </div>
+
+    <!-- 미신청자 -->
+    <div class="tabpanel" id="panelPending" hidden>
+      <div class="section__head" style="margin-bottom:16px">
+        <div>
+          <h2 class="subhead" style="margin-bottom:4px">미신청자 <span id="pendingCount">0</span>명</h2>
+          <p class="subnote" style="margin:0" id="pendingNote"></p>
+        </div>
+        <div class="btnrow">
+          <button class="btn btn--sm btn--secondary" id="copyPending" type="button">명단 복사</button>
+          <button class="btn btn--sm btn--secondary" id="exportPending" type="button">CSV 내보내기</button>
+        </div>
+      </div>
+      <div class="tablewrap tablescroll">
+        <div class="grid-head g-pending">
+          <span>사번</span><span>성명</span><span>평가모집단위</span><span>단과대학</span><span>구분</span>
+        </div>
+        <div id="pendingRows"></div>
+      </div>
+    </div>
+
+    <!-- 신청자 관리 -->
+    <div class="tabpanel" id="panelManage" hidden>
+      <h2 class="subhead" style="margin-bottom:4px">신청자 수기 관리</h2>
+      <p class="subnote">차수 이동 · 강제 배정 · 대기 승급은 모두 이력에 기록됩니다.</p>
+      <div class="tablewrap tablescroll">
+        <div class="grid-head g-manage">
+          <span>사번</span><span>성명</span><span>평가모집단위</span><span>차수</span><span>상태</span><span>처리</span>
+        </div>
+        <div id="manageRows"></div>
+      </div>
+    </div>
+
+    <!-- 차수 설정 -->
+    <div class="tabpanel" id="panelConfig" hidden>
+      <h2 class="subhead" style="margin-bottom:4px">차수 · 정원 설정</h2>
+      <p class="subnote">코드 수정 없이 일정·정원·마감을 변경할 수 있습니다. 정원을 현재 확정 인원보다 낮게 줄일 수는 없습니다.</p>
+      <div class="tablewrap tablescroll">
+        <div class="grid-head g-config">
+          <span>차수</span><span>1일차</span><span>2일차</span><span>정원</span><span>확정</span><span>마감</span>
+        </div>
+        <div id="configRows"></div>
+      </div>
+
+      <div class="configfoot">
+        <div class="field">
+          <label class="field__label" for="deadlineInput">신청 마감일시</label>
+          <input class="input" id="deadlineInput" type="datetime-local">
+        </div>
+        <div class="field">
+          <label class="field__label">변경 저장</label>
+          <button class="btn" id="saveConfig" type="button">설정 저장</button>
+        </div>
+      </div>
+      <div class="alert alert--danger" id="configError" hidden style="margin-top:16px"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="foot">울산대학교 입학관리팀 · 052-259-2058</div>
+
+<script src="assets/api.js"></script>
+<script src="assets/admin.js"></script>
+</body>
+</html>
