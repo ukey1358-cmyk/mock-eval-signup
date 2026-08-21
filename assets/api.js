@@ -7,7 +7,7 @@
   "use strict";
 
   var CFG = null;
-  var DEMO_KEY = "uou-mock-eval-demo-v1";
+  var DEMO_KEY = "uou-mock-eval-demo-v2";
 
   /* --- 설정 ------------------------------------------------------------- */
   function loadConfig() {
@@ -74,11 +74,13 @@
       { no: "900012", name: "오준석", unit: "12 간호학과", college: "의과대학", kind: "위촉" },
       { no: "900013", name: "서다인", unit: "01 자율전공학부", college: "인문예술대학", kind: "전임" }
     ],
+    // anon = 시연용으로 이미 차 있다고 가정하는 익명 신청 인원.
+    // 실제 좌석 수 = anon + 신청 배열의 확정 건수 (날짜로 추측하지 않는다)
     seedCohorts: [
-      { id: "C1", name: "1차", d1: "2026-08-24", d2: "2026-08-25", cap: 30, closed: false, taken: 29, wait: 0 },
-      { id: "C2", name: "2차", d1: "2026-08-26", d2: "2026-08-27", cap: 30, closed: false, taken: 23, wait: 0 },
-      { id: "C3", name: "3차", d1: "2026-08-28", d2: "2026-08-31", cap: 30, closed: false, taken: 8, wait: 0 },
-      { id: "C4", name: "4차", d1: "2026-09-01", d2: "2026-09-02", cap: 30, closed: false, taken: 0, wait: 0 }
+      { id: "C1", name: "1차", d1: "2026-08-24", d2: "2026-08-25", cap: 30, closed: false, anon: 27 },
+      { id: "C2", name: "2차", d1: "2026-08-26", d2: "2026-08-27", cap: 30, closed: false, anon: 22 },
+      { id: "C3", name: "3차", d1: "2026-08-28", d2: "2026-08-31", cap: 30, closed: false, anon: 7 },
+      { id: "C4", name: "4차", d1: "2026-09-01", d2: "2026-09-02", cap: 30, closed: false, anon: 0 }
     ],
 
     load: function () {
@@ -106,20 +108,21 @@
       try { localStorage.setItem(DEMO_KEY, JSON.stringify(st)); } catch (e) { /* noop */ }
     },
 
-    /* 확정 인원은 신청 배열에서 계산 (seed taken 은 기준선) */
-    counts: function (st, id) {
-      var base = Demo.seedCohorts.filter(function (c) { return c.id === id; })[0];
-      var seedTaken = base ? base.taken : 0;
-      var seedNames = st.apps.filter(function (a) { return a.cohort === id && a.status === "확정" && a.at.indexOf("2026-08-21") === 0; }).length;
-      var live = st.apps.filter(function (a) { return a.cohort === id && a.status === "확정"; }).length;
-      var taken = seedTaken - seedNames + live;
-      var wait = st.apps.filter(function (a) { return a.cohort === id && a.status === "대기"; }).length;
-      return { taken: Math.max(0, taken), wait: wait };
+    /* 좌석 수 = 익명 기준 인원 + 신청 배열의 확정 건수 */
+    counts: function (st, c) {
+      var anon = Number(c.anon) || 0;
+      var taken = anon + st.apps.filter(function (a) {
+        return a.cohort === c.id && a.status === "확정";
+      }).length;
+      var wait = st.apps.filter(function (a) {
+        return a.cohort === c.id && a.status === "대기";
+      }).length;
+      return { taken: taken, wait: wait };
     },
 
     cohortView: function (st) {
       return st.cohorts.map(function (c) {
-        var n = Demo.counts(st, c.id);
+        var n = Demo.counts(st, c);
         return Object.assign({}, c, { taken: n.taken, wait: n.wait });
       });
     },
