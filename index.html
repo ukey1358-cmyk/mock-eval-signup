@@ -56,16 +56,16 @@
           <label class="field__label" for="empNo">사번</label>
           <input class="input" id="empNo" name="empNo" type="text" inputmode="numeric" maxlength="6" placeholder="6자리 사번" required>
         </div>
-        <div class="field">
+        <div class="field" id="nameField" hidden>
           <label class="field__label" for="empName">성명</label>
-          <input class="input" id="empName" name="empName" type="text" maxlength="20" placeholder="명단에 등록된 성명" required>
+          <input class="input" id="empName" name="empName" type="text" maxlength="20" placeholder="명단에 등록된 성명">
         </div>
 
         <div class="alert alert--danger" id="verifyError" hidden></div>
 
         <button class="btn btn--lg btn--block" id="verifyBtn" type="submit">본인 확인</button>
 
-        <p class="note">명단에 없는 경우 입학관리팀(052-259-2058)으로 문의해 주세요. 입력한 사번과 성명은 비공개 명단과 서버에서 대조되며 화면에 명단이 노출되지 않습니다.</p>
+        <p class="note"><span id="verifyNote">명단에 없는 경우 입학관리팀(052-259-2058)으로 문의해 주세요. 입력한 사번은 비공개 명단과 서버에서 대조되며 화면에 명단이 노출되지 않습니다.</span></p>
 
         <div class="alert alert--info" id="demoHint" hidden></div>
       </form>

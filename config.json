@@ -1,6 +1,8 @@
 {
-  "_comment": "Apps Script 웹앱 배포 URL을 apiUrl에 기입하면 실서비스 모드로 전환됩니다. 비워두면 시연 모드(localStorage)로 동작합니다.",
+  "_comment": "apiUrl을 Apps Script 웹앱 URL로 채우면 실서비스 모드로 전환됩니다. 비우면 시연 모드로 동작합니다.",
   "apiUrl": "",
+  "requireName": false,
+  "_requireName": "true로 바꾸면 본인 확인 시 성명까지 함께 대조합니다(사번 추측 방지). 기본값 false는 사번 단독 확인.",
   "deadlineText": "2026-08-22T18:00",
   "venue": "울산대학교 22호관 401호 전산교육실",
   "contact": "052-259-2058"

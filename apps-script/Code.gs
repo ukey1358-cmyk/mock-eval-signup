@@ -227,12 +227,17 @@ function apiConfig() {
 
 function apiVerify(p) {
   var no = str(p.no), name = str(p.name);
-  if (!/^\d{6}$/.test(no)) return { ok: false, error: '사번은 숫자 6자리로 입력해 주세요.' };
-  if (!name) return { ok: false, error: '성명을 입력해 주세요.' };
+  // 설정 시트의 '성명확인' 이 Y 이면 성명까지 대조한다. 기본값은 사번 단독 확인.
+  var needName = str(conf('성명확인', 'N')).toUpperCase() === 'Y';
 
-  var hit = findRoster(no, name);
+  if (!/^\d{6}$/.test(no)) return { ok: false, error: '사번은 숫자 6자리로 입력해 주세요.' };
+  if (needName && !name) return { ok: false, error: '성명을 입력해 주세요.' };
+
+  var hit = needName ? findRoster(no, name) : rosterByNo(no);
   if (!hit) {
-    return { ok: false, error: '명단에 등록되어 있지 않습니다. 사번과 성명을 다시 확인하시거나 입학관리팀으로 문의해 주세요.' };
+    return { ok: false, error: needName
+      ? '명단에 등록되어 있지 않습니다. 사번과 성명을 다시 확인하시거나 입학관리팀으로 문의해 주세요.'
+      : '명단에 등록되어 있지 않습니다. 사번을 다시 확인하시거나 입학관리팀으로 문의해 주세요.' };
   }
 
   var my = null;
@@ -513,6 +518,7 @@ function setupSheets() {
     confSh.appendRow(['관리자비밀번호', 'CHANGE_ME_2027']);
     confSh.appendRow(['신청마감일시', '2026-08-22T18:00']);
     confSh.appendRow(['총원', 120]);
+    confSh.appendRow(['성명확인', 'N']);
   }
 
   var cohortSh = book.getSheetByName(SHEET_COHORT);

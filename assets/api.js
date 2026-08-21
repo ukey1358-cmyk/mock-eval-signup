@@ -138,10 +138,17 @@
           break;
 
         case "verify": {
+          var needName = CFG && CFG.requireName === true;
           var hit = st.roster.filter(function (r) {
-            return r.no === String(p.no || "").trim() && r.name === String(p.name || "").trim();
+            if (r.no !== String(p.no || "").trim()) return false;
+            return needName ? r.name === String(p.name || "").trim() : true;
           })[0];
-          if (!hit) { out = { ok: false, error: "명단에 등록되어 있지 않습니다. 사번과 성명을 다시 확인하시거나 입학관리팀으로 문의해 주세요." }; break; }
+          if (!hit) {
+            out = { ok: false, error: needName
+              ? "명단에 등록되어 있지 않습니다. 사번과 성명을 다시 확인하시거나 입학관리팀으로 문의해 주세요."
+              : "명단에 등록되어 있지 않습니다. 사번을 다시 확인하시거나 입학관리팀으로 문의해 주세요." };
+            break;
+          }
           var mine = st.apps.filter(function (a) { return a.no === hit.no && a.status !== "취소"; })[0];
           out = {
             ok: true, token: hit.no,

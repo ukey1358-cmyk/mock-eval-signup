@@ -5,7 +5,7 @@
   "use strict";
 
   var $ = function (id) { return document.getElementById(id); };
-  var state = { step: "verify", token: null, user: null, my: null, cohorts: [], selected: null, deadline: "" };
+  var state = { step: "verify", token: null, user: null, my: null, cohorts: [], selected: null, deadline: "", requireName: false };
 
   /* --- 화면 전환 --------------------------------------------------------- */
   function render() {
@@ -42,7 +42,7 @@
     var no = $("empNo").value.trim(), name = $("empName").value.trim();
     showError("verifyError", "");
     if (!/^\d{6}$/.test(no)) { showError("verifyError", "사번은 숫자 6자리로 입력해 주세요."); return; }
-    if (!name) { showError("verifyError", "성명을 입력해 주세요."); return; }
+    if (state.requireName && !name) { showError("verifyError", "성명을 입력해 주세요."); return; }
 
     var btn = $("verifyBtn");
     busy(btn, true);
@@ -193,11 +193,18 @@
   /* --- 초기화 ------------------------------------------------------------ */
   API.loadConfig().then(function (cfg) {
     state.deadline = cfg.deadlineText || "";
+    state.requireName = cfg.requireName === true;
+    if (state.requireName) {
+      $("nameField").hidden = false;
+      $("empName").setAttribute("required", "required");
+      $("verifyNote").textContent = "명단에 없는 경우 입학관리팀(052-259-2058)으로 문의해 주세요. " +
+        "입력한 사번과 성명은 비공개 명단과 서버에서 대조되며 화면에 명단이 노출되지 않습니다.";
+    }
     if (API.isDemo()) {
       $("modeTag").hidden = false;
       $("demoHint").hidden = false;
       $("demoHint").innerHTML = "백엔드 미연결 — 시연 모드로 동작합니다. 예시 사번 " +
-        '<span class="mono">900001</span> / 성명 <span class="mono">홍길동</span>';
+        '<span class="mono">900001</span>' + (state.requireName ? ' / 성명 <span class="mono">홍길동</span>' : "");
     }
     return API.call("config", {});
   })
