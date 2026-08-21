@@ -517,7 +517,7 @@ function setupSheets() {
   if (confSh.getLastRow() < 2) {
     confSh.appendRow(['관리자비밀번호', 'CHANGE_ME_2027']);
     confSh.appendRow(['신청마감일시', '2026-08-22T18:00']);
-    confSh.appendRow(['총원', 120]);
+    confSh.appendRow(['총원', 112]);
     confSh.appendRow(['성명확인', 'N']);
   }
 
